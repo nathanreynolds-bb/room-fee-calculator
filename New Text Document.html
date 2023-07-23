@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+
+	<body>
+		<form id="form" onsubmit="handleSubmit(event)">
+			<label for="flatRate">Flat Rate</label>
+			<input type="number" step="0.01" name="flatRate" id="flatRate" required />
+			<label for="nights">Nights:</label>
+			<input type="number" name="nights" id="nights" />
+			<div id="parkingOptions">
+				<input type="radio" name="parking" id="self" value="self">
+				<label for="self">Self Parking</label>
+				<input type="radio" name="parking" id="valet" value="valet">
+				<label for="valet">Valet Parking</label>
+				<input type="radio" name="parking" id="none" value="none">
+				<label for="none">None</label>
+			</div>
+			<label for="resort-fee">Resort Fee?</label>
+			<input type="checkbox" name="resort-fee" id="resort-fee">
+			<button type="submit">Submit</button>
+		</form>
+
+		<div id="results">
+			<p id="total"></p>
+		</div>
+
+		<!-- logic -->
+		<script>
+			function handleSubmit(event) {
+				event.preventDefault();
+
+				// define variables
+				let total;
+				const flatRate = document.getElementById("flatRate").value;
+				const nights = document.getElementById("nights").value;
+
+				const parkingChoice = [...document.getElementById("parkingOptions").children].filter(element => element.checked == true)[0].value
+				const resortFee = document.getElementById("resort-fee").checked;
+
+				const totalElement = document.getElementById('total')
+
+				// calculate results
+				total = flatRate * nights;
+				total *= 1.15;
+				console.log(`parkingChoice: ${parkingChoice}`)
+				switch (parkingChoice) {
+					case "self":
+						total += 16.23
+						break;
+
+					case "valet":
+						// log and modify total then delete alert
+						alert(`${parkingChoice} is a work in progress`)
+
+						break;
+					
+					default:
+						break;
+				}
+				total += resortFee ? 9.20 : 0;
+				console.log(total)
+				// re-render
+				totalElement.innerText = total.toFixed(2).toString();
+			}
+		</script>
+	</body>
+</html>
