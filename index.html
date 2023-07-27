@@ -73,7 +73,7 @@
 				logElement.innerText = `${flatRate} x ${rooms} = ${flatRate * rooms}\n`;
 				total = flatRate * rooms;
 
-				logElement.innerText += `${total} x 1.15 = ${total * 1.15}\n`;
+				logElement.innerText += `${total} x 1.15 = ${toSecondDecimal(total * 1.15)}\n`;
 				total = toSecondDecimal(total * 1.15);
 
 				if (parkingChoice != "none") {
