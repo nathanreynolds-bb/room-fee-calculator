@@ -4,29 +4,36 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
+		<style>
+			#total {
+				font-size: 2.5em;
+				text-decoration: underline;
+		}
+		</style>
 	</head>
 
 	<body>
 		<form id="form" onsubmit="handleSubmit(event)">
 			<label for="flatRate">Flat Rate</label>
 			<input type="number" step="0.01" name="flatRate" id="flatRate" required />
-			<label for="nights">Nights:</label>
+			<label for="nights">Rooms</label>
 			<input type="number" name="nights" id="nights" />
 			<div id="parkingOptions">
-				<input type="radio" name="parking" id="self" value="self">
+				<input type="radio" name="parking" id="self" value="self" />
 				<label for="self">Self Parking</label>
-				<input type="radio" name="parking" id="valet" value="valet">
+				<input type="radio" name="parking" id="valet" value="valet" />
 				<label for="valet">Valet Parking</label>
-				<input type="radio" name="parking" id="none" value="none">
+				<input type="radio" name="parking" id="none" value="none" />
 				<label for="none">None</label>
 			</div>
 			<label for="resort-fee">Resort Fee?</label>
-			<input type="checkbox" name="resort-fee" id="resort-fee">
-			<br>
+			<input type="checkbox" name="resort-fee" id="resort-fee" />
+			<br />
 			<button type="submit">Submit</button>
 		</form>
 
 		<div id="results">
+			<p id="log"></p>
 			<p id="total"></p>
 		</div>
 
@@ -36,37 +43,55 @@
 				event.preventDefault();
 
 				// define variables
-				let total;
 				const flatRate = document.getElementById("flatRate").value;
-				const nights = document.getElementById("nights").value;
-
-				const parkingChoice = [...document.getElementById("parkingOptions").children].filter(element => element.checked == true)[0].value
+				const rooms = document.getElementById("nights").value;
 				const resortFee = document.getElementById("resort-fee").checked;
 
-				const totalElement = document.getElementById('total')
+				const totalElement = document.getElementById("total");
+				const logElement = document.getElementById("log");
+
+				const parkingChoice = [
+					...document.getElementById("parkingOptions").children,
+				].filter((element) => element.checked == true)[0].value;
+
+				let parkingFee;
+				if (parkingChoice == "self") {
+					parkingFee = 16.23;
+				} else if (parkingChoice == "valet") {
+					parkingFee = 34.64;
+				} else {
+					parkingFee = 0;
+				}
 
 				// calculate results
-				total = flatRate * nights;
-				total *= 1.15;
-				console.log(`parkingChoice: ${parkingChoice}`)
-				switch (parkingChoice) {
-					case "self":
-						total += 16.23
-						break;
-
-					case "valet":
-						// log and modify total then delete alert
-						alert(`${parkingChoice} is a work in progress`)
-
-						break;
-					
-					default:
-						break;
+				function toSecondDecimal(number) {
+					return Math.round(number * 100) / 100
 				}
-				total += resortFee ? 9.20 : 0;
-				console.log(total)
-				// re-render
-				totalElement.innerText = total.toFixed(2).toString();
+
+				let total;
+
+				logElement.innerText = `${flatRate} x ${rooms} = ${flatRate * rooms}\n`;
+				total = flatRate * rooms;
+
+				logElement.innerText += `${total} x 1.15 = ${total * 1.15}\n`;
+				total = toSecondDecimal(total * 1.15);
+
+				if (parkingChoice != "none") {
+					logElement.innerText += `${total} + ${parkingFee} = ${
+						total + parkingFee
+					}\n`;
+					total += parkingFee;
+				}
+
+				if (resortFee) {
+					logElement.innerText += `${total} + 9.20 = ${toSecondDecimal(
+						total + 9.2
+					)}\n`;
+					total = toSecondDecimal(total + 9.2);
+				}
+
+				// display grand total
+				totalElement.innerText = `$${total}`;
 			}
 		</script>
 	</body>
