@@ -8,7 +8,7 @@
 			#total {
 				font-size: 2.5em;
 				text-decoration: underline;
-		}
+			}
 		</style>
 	</head>
 
@@ -65,22 +65,26 @@
 
 				// calculate results
 				function toSecondDecimal(number) {
-					return Math.round(number * 100) / 100
+					return Math.round(number * 100) / 100;
 				}
 
 				let total;
 
-				logElement.innerText = `${flatRate} x ${rooms} = ${flatRate * rooms}\n`;
-				total = flatRate * rooms;
+				logElement.innerText = `${flatRate} x ${rooms} = ${toSecondDecimal(
+					flatRate * rooms
+				)}\n`;
+				total = toSecondDecimal(flatRate * rooms);
 
-				logElement.innerText += `${total} x 1.15 = ${toSecondDecimal(total * 1.15)}\n`;
+				logElement.innerText += `${total} x 1.15 = ${toSecondDecimal(
+					total * 1.15
+				)}\n`;
 				total = toSecondDecimal(total * 1.15);
 
 				if (parkingChoice != "none") {
-					logElement.innerText += `${total} + ${parkingFee} = ${
+					logElement.innerText += `${total} + ${parkingFee} = ${toSecondDecimal(
 						total + parkingFee
-					}\n`;
-					total += parkingFee;
+					)}\n`;
+					total = toSecondDecimal(total + parkingFee);
 				}
 
 				if (resortFee) {
